@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="quick_notes_widget_title">Notas rápidas</string>
+    <string name="quick_notes_widget_description">Notas fixadas para copiar com um toque</string>
+    <string name="quick_notes_widget_short">Notas</string>
+    <string name="quick_notes_picker_open">Abrir notas</string>
+    <string name="quick_notes_widget_empty">Fixe notas no app para elas aparecerem aqui</string>
+</resources>
