@@ -8,10 +8,14 @@ rules_version = '2';
 // proteção é o código aleatório e a vida curta do documento.
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /monitor_sessions/{code} {
-      allow read, write: if code.matches('[0-9]{6}');
+    // Sinalização do Monitoramento e do Walkie-talkie: mesma estrutura, sessões
+    // identificadas por um código de 6 dígitos.
+    match /{room}/{code} {
+      allow read, write: if room in ['monitor_sessions', 'walkie_sessions']
+        && code.matches('[0-9]{6}');
       match /{candidates}/{candidateId} {
-        allow read, write: if true;
+        allow read, write: if room in ['monitor_sessions', 'walkie_sessions']
+          && code.matches('[0-9]{6}');
       }
     }
   }

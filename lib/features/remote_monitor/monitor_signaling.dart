@@ -11,8 +11,11 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 /// O transmissor é o "caller" (tem as tracks e cria a oferta); o receptor é o
 /// "callee" (cria a resposta).
 class MonitorSignaling {
-  MonitorSignaling(this.code, {required this.isTransmitter})
-    : _doc = FirebaseFirestore.instance.collection('monitor_sessions').doc(code);
+  MonitorSignaling(
+    this.code, {
+    required this.isTransmitter,
+    String collection = 'monitor_sessions',
+  }) : _doc = FirebaseFirestore.instance.collection(collection).doc(code);
 
   final String code;
   final bool isTransmitter;

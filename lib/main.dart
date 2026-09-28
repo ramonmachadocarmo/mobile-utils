@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'features/call_blocker/call_blocker_page.dart';
 import 'features/quick_notes/quick_notes_page.dart';
 import 'features/remote_monitor/remote_monitor_page.dart';
+import 'features/walkie_talkie/walkie_talkie_page.dart';
 import 'features/quick_notes/quick_notes_store.dart';
 import 'features/quick_notes/quick_notes_widget.dart';
 import 'splash_overlay.dart';
@@ -68,6 +69,12 @@ final _utilities = <_Utility>[
     'Transmite câmera, microfone e tela para outro aparelho',
     Icons.monitor,
     (_) => const RemoteMonitorPage(),
+  ),
+  _Utility(
+    'Walkie-talkie',
+    'Chamada de duas vias com câmera e microfone',
+    Icons.record_voice_over,
+    (_) => const WalkieTalkiePage(),
   ),
 ];
 

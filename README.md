@@ -80,12 +80,22 @@ Passo a passo completo em [docs/firebase-setup.md](docs/firebase-setup.md). Em r
    - Android (pacote `com.ramonmachadocarmo.mobileUtils`) → `android/app/google-services.json`.
    - iOS (bundle `com.ramonmachadocarmo.mobileUtils`) → `ios/Runner/GoogleService-Info.plist`.
    O jeito rápido é `dart pub global activate flutterfire_cli && flutterfire configure`.
-3. Publique as regras de `firestore.rules`. Elas liberam só a coleção `monitor_sessions` (ofertas WebRTC efêmeras, sem dados pessoais). Sem login, quem souber o código pode entrar na sessão; para endurecer, adicione Firebase Auth.
+3. Publique as regras de `firestore.rules`. Elas liberam só as coleções `monitor_sessions` e `walkie_sessions` (ofertas WebRTC efêmeras, sem dados pessoais). Sem login, quem souber o código pode entrar na sessão; para endurecer, adicione Firebase Auth.
 4. No CI, o build funciona sem o `google-services.json` (o plugin do Firebase só é aplicado quando o arquivo existe), mas o monitoramento só conecta com ele presente. Para o app do CI funcionar, comite o arquivo ou injete-o de um secret.
 
 #### iOS: captura de tela (pendente)
 
 Câmera e microfone já funcionam no iOS. A captura de **tela** no iOS exige uma *Broadcast Upload Extension* (outro target, como a do bloqueio de chamadas) seguindo o guia de screen sharing do `flutter_webrtc`. Até ela existir, escolher "Tela" num iPhone transmissor não funciona.
+
+### Walkie-talkie
+
+Chamada de **duas vias** com câmera e microfone entre dois aparelhos — o monitoramento em versão simétrica, sem captura de tela. Funciona no Android e no iOS.
+
+- **Pareamento**: um aparelho **cria a sala** e mostra um código de 6 dígitos; o outro **entra** com o código. A conexão é ponto a ponto (WebRTC), com a mesma sinalização do monitoramento (coleção `walkie_sessions`).
+- **Modo walkie-talkie (push-to-talk)**: por padrão o microfone fica mudo e só transmite enquanto você segura o botão **Segure para falar**. Dá para desligar o modo e deixar o microfone sempre aberto, como uma chamada comum.
+- **Câmera**: preview da própria câmera no canto e botão para virar entre frontal e traseira.
+
+Usa o mesmo Firebase do monitoramento (veja a configuração acima). Código: `lib/features/walkie_talkie/`.
 
 ## Identidade visual
 
