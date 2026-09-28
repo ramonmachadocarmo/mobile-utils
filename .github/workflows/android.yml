@@ -11,6 +11,11 @@ on:
         type: choice
         options: [internal, alpha, beta, production]
         default: internal
+      status:
+        description: Status do release (use draft no primeiro teste ou se o app ainda não foi publicado)
+        type: choice
+        options: [draft, completed]
+        default: draft
 
 env:
   FLUTTER_VERSION: 3.41.4
@@ -88,4 +93,5 @@ jobs:
           packageName: com.ramonmachadocarmo.mobileUtils
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
           track: ${{ inputs.track || 'internal' }}
-          status: completed
+          # Tag (push) sobe como completed; disparo manual usa o status escolhido (draft por padrão).
+          status: ${{ inputs.status || 'completed' }}
