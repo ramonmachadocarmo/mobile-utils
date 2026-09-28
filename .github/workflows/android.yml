@@ -2,9 +2,10 @@ name: Android
 
 on:
   pull_request:
-  # Publicar um Release no GitHub (que cria a tag vX.Y.Z) dispara o deploy.
-  release:
-    types: [published]
+  # Push de uma tag vX.Y.Z dispara o deploy (scripts/release.sh cria e sobe a tag).
+  # Publicar um Release no GitHub também funciona, pois cria a tag.
+  push:
+    tags: ['v*']
   workflow_dispatch:
     inputs:
       track:
@@ -39,7 +40,7 @@ jobs:
 
   deploy:
     needs: test
-    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: play-store
     steps:
