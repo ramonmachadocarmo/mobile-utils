@@ -1,0 +1,83 @@
+name: iOS setup
+
+# Tarefas de configuração do iOS, disparadas manualmente pela aba Actions:
+# - targets: cria os targets das extensions no Runner.xcodeproj, valida com um
+#   build sem assinatura e commita o projeto atualizado (uma vez só).
+# - certificates: cria/renova o certificado de distribuição e os provisioning
+#   profiles no repositório do match (uma vez, e de novo quando expirarem).
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: Tarefa
+        type: choice
+        options: [targets, certificates]
+        default: targets
+
+jobs:
+  targets:
+    if: inputs.task == 'targets'
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.41.4
+          channel: stable
+          cache: true
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+          working-directory: ios
+
+      - name: Criar targets das extensions
+        working-directory: ios
+        run: bundle exec ruby scripts/add_extension_targets.rb
+
+      - run: flutter pub get
+
+      # Compila Runner + extensions; também gera Podfile/Podfile.lock e ajusta os xcconfig.
+      - run: flutter build ios --release --no-codesign
+
+      - name: Commitar projeto iOS
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ios
+          git status --short
+          if git diff --cached --quiet; then
+            echo "Nada para commitar"
+          else
+            git commit -m "ios: adiciona targets CallBlockerExtension e QuickNotesWidget"
+            git push
+          fi
+
+  certificates:
+    if: inputs.task == 'certificates'
+    runs-on: macos-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+          working-directory: ios
+
+      - name: fastlane match
+        working-directory: ios
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        run: bundle exec fastlane certificates

@@ -1,0 +1,18 @@
+rules_version = '2';
+
+// Regras da sinalização do monitoramento. As sessões guardam só ofertas WebRTC
+// efêmeras (SDP e ICE), nenhum dado pessoal, e são apagadas ao encerrar.
+//
+// Sem login, qualquer um que descubra o código de 6 dígitos poderia entrar numa
+// sessão. Para endurecer: exija Firebase Auth e valide o dono da sessão. Aqui a
+// proteção é o código aleatório e a vida curta do documento.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /monitor_sessions/{code} {
+      allow read, write: if code.matches('[0-9]{6}');
+      match /{candidates}/{candidateId} {
+        allow read, write: if true;
+      }
+    }
+  }
+}

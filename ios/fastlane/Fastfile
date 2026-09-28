@@ -1,0 +1,56 @@
+default_platform(:ios)
+
+APP_ID = "com.ramonmachadocarmo.mobileUtils"
+TARGETS = {
+  "Runner" => APP_ID,
+  "CallBlockerExtension" => "#{APP_ID}.CallBlockerExtension",
+  "QuickNotesWidget" => "#{APP_ID}.QuickNotesWidget",
+}.freeze
+
+platform :ios do
+  before_all do
+    # Chave de API do App Store Connect; match e pilot a usam automaticamente.
+    app_store_connect_api_key(
+      key_id: ENV["ASC_KEY_ID"],
+      issuer_id: ENV["ASC_ISSUER_ID"],
+      key_content: ENV["ASC_KEY_P8_BASE64"],
+      is_key_content_base64: true,
+    )
+  end
+
+  desc "Cria (ou renova) o certificado de distribuição e os profiles no repositório do match"
+  lane :certificates do
+    match(readonly: false)
+  end
+
+  desc "Build assinado do app e upload para o TestFlight (rodar depois de flutter build ios --no-codesign)"
+  lane :beta do
+    setup_ci
+    match(readonly: true)
+
+    profiles = TARGETS.values.to_h { |id| [id, ENV["sigh_#{id}_appstore_profile-name"]] }
+    TARGETS.each do |target, id|
+      update_code_signing_settings(
+        path: "Runner.xcodeproj",
+        targets: [target],
+        build_configurations: ["Release"],
+        use_automatic_signing: false,
+        team_id: ENV["APPLE_TEAM_ID"],
+        bundle_identifier: id,
+        code_sign_identity: "Apple Distribution",
+        profile_name: profiles[id],
+      )
+    end
+
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      configuration: "Release",
+      export_method: "app-store",
+      export_options: { provisioningProfiles: profiles },
+      output_directory: "../build/ios/fastlane",
+    )
+
+    upload_to_testflight(skip_waiting_for_build_processing: true)
+  end
+end

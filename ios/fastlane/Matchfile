@@ -1,0 +1,11 @@
+# Certificado e provisioning profiles ficam criptografados (MATCH_PASSWORD) num
+# repositório git privado separado (MATCH_GIT_URL).
+git_url(ENV["MATCH_GIT_URL"])
+storage_mode("git")
+type("appstore")
+team_id(ENV["APPLE_TEAM_ID"])
+app_identifier([
+  "com.ramonmachadocarmo.mobileUtils",
+  "com.ramonmachadocarmo.mobileUtils.CallBlockerExtension",
+  "com.ramonmachadocarmo.mobileUtils.QuickNotesWidget",
+])

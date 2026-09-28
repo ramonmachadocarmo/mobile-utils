@@ -16,7 +16,7 @@ struct NotesEntry: TimelineEntry {
 }
 
 struct NotesProvider: TimelineProvider {
-  static let appGroup = "group.com.ramonmachadocarmo.mobile_utils"
+  static let appGroup = "group.com.ramonmachadocarmo.mobileUtils"
   static let key = "quick_notes_widget"
 
   func placeholder(in context: Context) -> NotesEntry {

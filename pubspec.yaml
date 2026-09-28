@@ -38,6 +38,11 @@ dependencies:
   shared_preferences: ^2.5.5
   local_auth: ^3.0.2
   google_fonts: ^8.2.1
+  flutter_webrtc: ^1.6.2+hotfix.3
+  firebase_core: ^4.15.0
+  cloud_firestore: ^6.10.0
+  permission_handler: 11.3.1
+  flutter_foreground_task: ^10.0.0
 
 dev_dependencies:
   flutter_test:

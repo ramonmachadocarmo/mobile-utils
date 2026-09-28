@@ -4,7 +4,7 @@ import Foundation
 /// Call Directory Extension: o iOS pede a lista de números a bloquear e a
 /// aplica sozinho. Recarregada pelo app sempre que a configuração muda.
 class CallDirectoryHandler: CXCallDirectoryProvider {
-  private let appGroup = "group.com.ramonmachadocarmo.mobile_utils"
+  private let appGroup = "group.com.ramonmachadocarmo.mobileUtils"
   private let configKey = "call_blocker_config"
 
   override func beginRequest(with context: CXCallDirectoryExtensionContext) {

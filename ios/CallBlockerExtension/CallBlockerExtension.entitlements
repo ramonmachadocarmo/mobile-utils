@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.ramonmachadocarmo.mobile_utils</string>
+		<string>group.com.ramonmachadocarmo.mobileUtils</string>
 	</array>
 </dict>
 </plist>

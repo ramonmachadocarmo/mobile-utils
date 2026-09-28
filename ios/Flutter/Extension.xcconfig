@@ -1,0 +1,3 @@
+// Base das extensions (CallBlockerExtension, QuickNotesWidget): herda só as
+// variáveis do Flutter (FLUTTER_BUILD_NAME/NUMBER), sem os Pods do Runner.
+#include "Generated.xcconfig"

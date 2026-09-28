@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Política de Privacidade — OmniTool</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      line-height: 1.6; max-width: 760px; margin: 0 auto; padding: 24px 16px; color: #1a1a1a;
+    }
+    @media (prefers-color-scheme: dark) { body { background: #111; color: #eee; } a { color: #6ea8fe; } }
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.2rem; margin-top: 2rem; }
+    code { background: rgba(128,128,128,.2); padding: 0 4px; border-radius: 4px; }
+    .updated { color: #888; font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <h1>Política de Privacidade — OmniTool</h1>
+  <p class="updated">Última atualização: 28 de setembro de 2026</p>
+
+  <p>
+    O OmniTool é um conjunto de utilitários pessoais para Android e iOS. Esta política
+    explica quais dados o app acessa e como eles são tratados. O desenvolvedor é
+    <strong>Ramon Machado Carmo</strong>. Dúvidas: <strong>ramon@prmord.io</strong>.
+  </p>
+
+  <h2>Resumo</h2>
+  <p>
+    O OmniTool <strong>não coleta, não vende e não armazena seus dados em nossos servidores</strong>.
+    A maior parte das informações fica apenas no seu aparelho. No utilitário de Monitoramento,
+    o vídeo e o áudio vão diretamente de um aparelho para o outro, sem passar por nós.
+  </p>
+
+  <h2>Dados por funcionalidade</h2>
+
+  <h3>Bloqueio de chamadas</h3>
+  <p>
+    Para identificar chamadas a bloquear, o app lê seus <strong>contatos</strong> e os números
+    das chamadas recebidas. Essas informações e as regras de bloqueio ficam <strong>somente no
+    seu aparelho</strong> e não são enviadas para lugar nenhum.
+  </p>
+
+  <h3>Notas rápidas</h3>
+  <p>
+    As notas ficam guardadas <strong>apenas no seu aparelho</strong>. Notas marcadas como ocultas
+    exigem biometria ou PIN do dispositivo para serem exibidas. Nada é enviado para servidores.
+  </p>
+
+  <h3>Monitoramento</h3>
+  <p>
+    Este utilitário permite que um aparelho (transmissor) envie <strong>câmera, microfone e tela</strong>
+    para outro aparelho (receptor), para acompanhamento parental consentido. Sobre esses dados:
+  </p>
+  <ul>
+    <li>O vídeo e o áudio são transmitidos <strong>diretamente entre os dois aparelhos</strong>
+      (tecnologia WebRTC, ponto a ponto). <strong>Não são gravados nem armazenados</strong> por nós.</li>
+    <li>Enquanto transmite, o aparelho monitorado exibe um <strong>aviso permanente</strong> na tela e
+      na barra de notificações. O app não funciona de forma oculta.</li>
+    <li>Para os dois aparelhos se encontrarem, um registro temporário de conexão (dados técnicos da
+      chamada WebRTC, sem áudio, vídeo ou dados pessoais) passa pelo <strong>Google Firebase (Cloud
+      Firestore)</strong> e é <strong>apagado ao encerrar a sessão</strong>.</li>
+  </ul>
+
+  <h2>Permissões</h2>
+  <ul>
+    <li><strong>Câmera</strong> e <strong>Microfone</strong>: transmitir vídeo e áudio no Monitoramento.</li>
+    <li><strong>Captura de tela</strong>: transmitir a tela no Monitoramento (com confirmação do sistema a cada sessão).</li>
+    <li><strong>Contatos</strong>: identificar números no Bloqueio de chamadas.</li>
+    <li><strong>Notificações</strong> e <strong>serviço em primeiro plano</strong>: manter o aviso de que a transmissão está ativa.</li>
+    <li><strong>Biometria</strong>: proteger notas ocultas.</li>
+  </ul>
+  <p>Todas as permissões são solicitadas no momento do uso e podem ser revogadas nos ajustes do aparelho.</p>
+
+  <h2>Compartilhamento com terceiros</h2>
+  <p>
+    O único serviço de terceiros é o <strong>Google Firebase</strong>, usado apenas para a
+    sinalização do Monitoramento, conforme descrito acima. Consulte a
+    <a href="https://firebase.google.com/support/privacy">Política de Privacidade do Firebase</a>.
+    Não usamos anúncios nem rastreamento.
+  </p>
+
+  <h2>Crianças</h2>
+  <p>
+    O app é destinado a <strong>adultos</strong>. O Monitoramento existe para que responsáveis
+    acompanhem os próprios filhos, com o conhecimento e o consentimento de quem usa o aparelho
+    monitorado, que é sempre avisado pelo indicador permanente.
+  </p>
+
+  <h2>Retenção e exclusão</h2>
+  <p>
+    Dados locais (contatos lidos, notas, regras de bloqueio) permanecem no aparelho até você
+    apagá-los no app ou desinstalá-lo. Os registros temporários de sinalização são apagados ao
+    fim de cada sessão de monitoramento.
+  </p>
+
+  <h2>Alterações</h2>
+  <p>Podemos atualizar esta política. A data no topo indica a última versão.</p>
+
+  <h2>Contato</h2>
+  <p>Para dúvidas sobre esta política: <strong>ramon@prmord.io</strong>.</p>
+</body>
+</html>

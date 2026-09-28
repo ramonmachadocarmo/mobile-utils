@@ -7,6 +7,12 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// O plugin do Firebase só entra quando google-services.json foi adicionado,
+// para o build continuar funcionando antes de o Firebase ser configurado.
+if (rootProject.file("app/google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 // Assinatura de release: android/key.properties (local) ou gerado pelo CI a partir dos secrets.
 val keystoreProperties = Properties().apply {
     val file = rootProject.file("key.properties")
@@ -30,7 +36,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.ramonmachadocarmo.mobile_utils"
+        applicationId = "com.ramonmachadocarmo.mobileUtils"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         // Android 10+: RoleManager.ROLE_CALL_SCREENING (bloqueio de chamadas)

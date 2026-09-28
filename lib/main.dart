@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'features/call_blocker/call_blocker_page.dart';
 import 'features/quick_notes/quick_notes_page.dart';
+import 'features/remote_monitor/remote_monitor_page.dart';
 import 'features/quick_notes/quick_notes_store.dart';
 import 'features/quick_notes/quick_notes_widget.dart';
 import 'splash_overlay.dart';
@@ -61,6 +62,12 @@ final _utilities = <_Utility>[
     'Textos para copiar com um toque',
     Icons.content_paste,
     (_) => const QuickNotesPage(),
+  ),
+  _Utility(
+    'Monitoramento',
+    'Transmite câmera, microfone e tela para outro aparelho',
+    Icons.monitor,
+    (_) => const RemoteMonitorPage(),
   ),
 ];
 

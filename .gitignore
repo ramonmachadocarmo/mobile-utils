@@ -66,3 +66,14 @@ GoogleService-Info.plist
 *.apk
 *.aab
 *.ipa
+
+# iOS / fastlane
+ios/vendor/
+ios/.bundle/
+ios/fastlane/report.xml
+ios/fastlane/Preview.html
+ios/fastlane/screenshots/
+ios/fastlane/test_output/
+ios/fastlane/README.md
+*.dSYM.zip
+*.cer

@@ -1,0 +1,69 @@
+name: Release iOS (TestFlight)
+
+# DEPLOY DESATIVADO por enquanto: só roda manualmente e compila sem assinatura.
+# Para reativar, descomente o gatilho por tag e os passos de assinatura/upload.
+on:
+  # push:
+  #   tags: ['v*.*.*']
+  workflow_dispatch:
+
+concurrency:
+  group: ios-release
+  cancel-in-progress: false
+
+jobs:
+  testflight:
+    runs-on: macos-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.41.4
+          channel: stable
+          cache: true
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+          working-directory: ios
+
+      - name: Versão
+        id: version
+        run: |
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            NAME="${GITHUB_REF_NAME#v}"
+          else
+            NAME="$(grep '^version:' pubspec.yaml | sed -E 's/version: *([^+]+).*/\1/')"
+          fi
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+
+      - run: flutter pub get
+      - run: flutter test
+
+      - name: Build Flutter
+        run: |
+          flutter build ios --release --no-codesign \
+            --build-name=${{ steps.version.outputs.name }} \
+            --build-number=${{ github.run_number }}
+
+#     - name: Assinar e enviar para o TestFlight
+#       working-directory: ios
+#       env:
+#         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+#         ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+#         ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+#         ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+#         MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+#         MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+#         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#       run: bundle exec fastlane beta
+
+#     - uses: actions/upload-artifact@v4
+#       if: always()
+#       with:
+#         name: ios-${{ steps.version.outputs.name }}+${{ github.run_number }}
+#         path: build/ios/fastlane/
+#         if-no-files-found: ignore

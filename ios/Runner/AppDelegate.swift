@@ -24,8 +24,8 @@ import WidgetKit
 /// Ponte com o Flutter para o bloqueio de chamadas. A configuração fica no
 /// App Group para a CallBlockerExtension (Call Directory Extension) ler.
 enum CallBlockerPlugin {
-  static let appGroup = "group.com.ramonmachadocarmo.mobile_utils"
-  static let extensionId = "com.ramonmachadocarmo.mobile_utils.CallBlockerExtension"
+  static let appGroup = "group.com.ramonmachadocarmo.mobileUtils"
+  static let extensionId = "com.ramonmachadocarmo.mobileUtils.CallBlockerExtension"
   static let configKey = "call_blocker_config"
 
   static func register(with messenger: FlutterBinaryMessenger) {
