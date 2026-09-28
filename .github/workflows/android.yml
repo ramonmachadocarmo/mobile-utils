@@ -2,8 +2,9 @@ name: Android
 
 on:
   pull_request:
-  push:
-    tags: ['v*']
+  # Publicar um Release no GitHub (que cria a tag vX.Y.Z) dispara o deploy.
+  release:
+    types: [published]
   workflow_dispatch:
     inputs:
       track:
@@ -38,7 +39,7 @@ jobs:
 
   deploy:
     needs: test
-    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: play-store
     steps:
@@ -69,23 +70,12 @@ jobs:
             echo "keyPassword=$KEY_PASSWORD"
           } > key.properties
 
-      # versionName vem da tag (v1.2.3 -> 1.2.3; manual usa o pubspec). O versionCode
-      # é (número da execução + offset), sempre crescente. O offset fica acima do
-      # último upload manual (1000); aumente-o se a Play recusar por já existir um
-      # versionCode maior.
+      # versionName (N.N.N) e versionCode (+N) vêm do pubspec.yaml.
+      # Use scripts/bump_version.sh para subir a versão antes de publicar o release.
       - name: Build app bundle
-        env:
-          VERSION_CODE_OFFSET: 1000
         run: |
-          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
-            BUILD_NAME="${GITHUB_REF_NAME#v}"
-          else
-            BUILD_NAME="$(grep '^version:' pubspec.yaml | sed -E 's/version: *([^+]+).*/\1/')"
-          fi
           flutter pub get
-          flutter build appbundle --release \
-            --build-name="$BUILD_NAME" \
-            --build-number=$(( GITHUB_RUN_NUMBER + VERSION_CODE_OFFSET ))
+          flutter build appbundle --release
 
       - uses: r0adkll/upload-google-play@v1
         with:

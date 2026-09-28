@@ -113,11 +113,16 @@ flutter run
 
 ## Release Android (Play Store)
 
-`.github/workflows/android.yml` roda analyze e testes em todo PR. Com uma tag `v*` (ou manualmente pela aba Actions, escolhendo o track), gera o AAB assinado e envia para a Play Store (track `internal` por padrão). O `versionName` vem da tag e o `versionCode` é o número da execução.
+`.github/workflows/android.yml` roda analyze e testes em todo PR. **Publicar um Release no GitHub** gera o AAB assinado e envia para o teste interno da Play Store (`internal`, `completed`). O disparo manual pela aba Actions permite escolher track e status (padrão `draft`), útil para validar o pipeline sem mexer no teste interno.
+
+O `versionName` (`N.N.N`) e o `versionCode` (`+N`) vêm do `pubspec.yaml`. Para lançar, suba a versão e publique o release:
 
 ```bash
-git tag v1.0.1 && git push origin v1.0.1
+scripts/bump_version.sh patch   # ou minor / major — incrementa também o build number
+scripts/release.sh              # commita, faz push e cria o Release no GitHub (dispara o deploy)
 ```
+
+`release.sh` usa o GitHub CLI (`gh auth login`). O build number sempre cresce, então o deploy não é recusado por `versionCode` repetido.
 
 ### Configuração (uma vez só)
 
