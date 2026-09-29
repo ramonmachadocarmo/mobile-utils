@@ -13,7 +13,10 @@ Rejeita automaticamente chamadas recebidas conforme regras configuráveis:
 - **Números digitados**: qualquer número, com descrição opcional.
 - **Números dos contatos**: escolhidos da agenda (busca e seleção múltipla).
 - **Desconhecidos**: números fora da agenda e números ocultos/privados (**só Android**).
-- **Histórico** das chamadas rejeitadas nos últimos 7 dias; as mais antigas são apagadas automaticamente (**só Android**).
+- **Prefixos**: todos os números que começam com um prefixo, ex.: `0303` (telemarketing), um DDD, ou `+1` para outro país (**só Android**). Prefixos sem `+` comparam com o número nacional (sem DDI e sem zeros) e precisam de pelo menos 2 dígitos.
+- **Horário de silêncio**: um "não perturbe" com início, fim e dias da semana; pode atravessar a meia-noite (os dias marcados são os do início). Opções para deixar passar os contatos e quem ligar de novo em até 3 minutos, para urgências (**só Android**).
+- **Resposta por SMS**: manda uma mensagem configurável a quem foi rejeitado, no máximo uma vez a cada 12 h por número e nunca para números ocultos. Por padrão só responde as chamadas do horário de silêncio (**só Android**).
+- **Histórico** das chamadas rejeitadas nos últimos 7 dias, indicando as respondidas por SMS; as mais antigas são apagadas automaticamente (**só Android**).
 
 Os números batem por sufixo (mínimo de 8 dígitos), então `+55 11 91234-5678`, `(11) 91234-5678` e `011 91234-5678` são tratados como o mesmo número.
 
@@ -21,12 +24,19 @@ Os números batem por sufixo (mínimo de 8 dígitos), então `+55 11 91234-5678`
 |---|---|---|
 | Bloquear números da lista | ✅ `CallScreeningService` | ✅ Call Directory Extension |
 | Bloquear desconhecidos | ✅ | ❌ a Apple não permite; use Ajustes › Apps › Telefone › Silenciar Desconhecidos |
+| Prefixos, horário de silêncio, SMS | ✅ | ❌ a Call Directory Extension só aceita uma lista fixa de números; use o Foco do iOS |
 | Histórico (7 dias) | ✅ | ❌ o iOS não informa a extensão |
 | Versão mínima | Android 10 (API 29) | iOS 14 |
 
 #### Android
 
 Na primeira vez, toque em **Ativar** na tela de bloqueio e escolha o OmniTool como *app de identificação de chamadas e spam*. Para bloquear desconhecidos, o app precisa da permissão de contatos (pedida ao ligar a opção). Sem ela, não dá para saber quem é desconhecido e as chamadas passam; se a permissão for retirada depois (ex.: reinstalação), a tela mostra um aviso com o botão **Permitir**.
+
+O horário de silêncio com "permitir contatos" também depende da permissão de contatos: sem ela, as chamadas passam (para não barrar a família) e a tela mostra um aviso. A resposta por SMS pede a permissão de SMS ao ser ligada e pode ter custo da operadora.
+
+> **Play Store:** `SEND_SMS` é uma permissão restrita. Publicar com ela exige preencher a *Declaração de permissões* na Play Console, e o Google pode recusar o uso. Se for recusado, remova a linha `SEND_SMS` do `AndroidManifest.xml`: o resto do bloqueio continua funcionando e a opção de SMS só mostra o aviso de permissão.
+
+As regras em Kotlin espelham as de Dart (`phone_utils.dart` e `QuietHours` em `call_blocker_config.dart`), que têm os testes; mudou uma, mude a outra.
 
 Código nativo: `android/app/src/main/kotlin/.../callblocker/`.
 
@@ -96,6 +106,27 @@ Chamada de **duas vias** com câmera e microfone entre dois aparelhos — o moni
 - **Câmera**: preview da própria câmera no canto e botão para virar entre frontal e traseira.
 
 Usa o mesmo Firebase do monitoramento (veja a configuração acima). Código: `lib/features/walkie_talkie/`.
+
+### Medidor de ruído
+
+Mostra o nível de barulho em decibéis pelo microfone, com mínimo, média e máximo, gráfico dos últimos 30 s e uma tabela de referência (conversa, trânsito, limite de 85 dB para 8 h de exposição). Funciona no Android e no iOS.
+
+- O áudio é lido em PCM e descartado na hora; nada é gravado nem enviado.
+- A média é a energética (Leq), como nos decibelímetros, e não a média simples dos dB.
+- O valor é o nível do microfone em dBFS + 90 dB, uma aproximação de dB SPL para celulares comuns. Não é um aparelho certificado: em **Calibrar** dá para ajustar ±20 dB comparando com um decibelímetro de referência.
+- No Android usa a fonte de áudio de reconhecimento de voz, que desliga o ganho automático.
+
+Código: `lib/features/noise_meter/`.
+
+### WhatsApp rápido
+
+Abre uma conversa no WhatsApp com qualquer número, sem salvar o contato. Funciona no Android e no iOS.
+
+- Digite ou cole o número; sem `+`, recebe o DDI configurado (padrão +55). Números brasileiros precisam do DDD.
+- Mensagem inicial opcional.
+- Guarda os 10 últimos números para abrir de novo com um toque.
+
+Usa o link oficial `https://wa.me/<número>?text=<mensagem>`. Código: `lib/features/quick_whatsapp/`.
 
 ## Identidade visual
 
