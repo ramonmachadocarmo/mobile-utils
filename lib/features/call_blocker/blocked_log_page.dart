@@ -62,7 +62,7 @@ class _BlockedLogPageState extends State<BlockedLogPage> {
                       return ListTile(
                         leading: const Icon(Icons.call_end, color: Colors.red),
                         title: Text(e.number.isEmpty ? 'Número oculto' : e.number),
-                        subtitle: Text(e.reason),
+                        subtitle: Text(e.smsSent ? '${e.reason} · respondida por SMS' : e.reason),
                         trailing: Text(_format(e.timestamp)),
                       );
                     },

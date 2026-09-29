@@ -20,7 +20,7 @@
 		<key>NSCameraUsageDescription</key>
 		<string>Usado para transmitir a câmera no monitoramento.</string>
 		<key>NSMicrophoneUsageDescription</key>
-		<string>Usado para transmitir o áudio no monitoramento.</string>
+		<string>Usado para transmitir o áudio no monitoramento e no walkie-talkie e para medir o nível de ruído (o áudio do medidor não é gravado).</string>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>audio</string>

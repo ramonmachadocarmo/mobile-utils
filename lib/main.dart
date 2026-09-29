@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'features/call_blocker/call_blocker_page.dart';
+import 'features/noise_meter/noise_meter_page.dart';
+import 'features/quick_whatsapp/quick_whatsapp_page.dart';
 import 'features/quick_notes/quick_notes_page.dart';
 import 'features/remote_monitor/remote_monitor_page.dart';
 import 'features/walkie_talkie/walkie_talkie_page.dart';
@@ -75,6 +77,18 @@ final _utilities = <_Utility>[
     'Chamada de duas vias com câmera e microfone',
     Icons.record_voice_over,
     (_) => const WalkieTalkiePage(),
+  ),
+  _Utility(
+    'Medidor de ruído',
+    'Mede o nível de barulho em decibéis',
+    Icons.graphic_eq,
+    (_) => const NoiseMeterPage(),
+  ),
+  _Utility(
+    'WhatsApp rápido',
+    'Conversa com um número sem salvar o contato',
+    Icons.chat_outlined,
+    (_) => const QuickWhatsappPage(),
   ),
 ];
 
